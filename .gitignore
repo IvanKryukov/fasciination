@@ -1,2 +1,5 @@
-# Игнорировать все файлы в каталоге Debug/
+# Игнорировать все файлы в каталогах 
 Debug/
+.vs/
+fASCIInation/Debug/
+fASCIInation/x64/
