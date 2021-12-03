@@ -36,39 +36,39 @@ void print_scene(t_usr usr)
 {
     std::cout << "##########################################" << std::endl;
 
-    for (int i = 0; i < Y_SIZE; i++)
+    for (int y = 0; y < Y_SIZE; y++)
     {
         std::cout << "#";
 
-        for (int j = 0; j < X_SIZE; j++)
+        for (int x = 0; x < X_SIZE; x++)
         {
-            if (i == usr.y && j == usr.x)
+            if (y == usr.y && x == usr.x)
                 std::cout << usr.skin;
             else
-                std::cout << usr_map[i][j];
-            /*
+                std::cout << usr_map[y][x];
+            
             switch (usr.direction)
             {
             case 1:
-                if (i == usr.y && j == usr.x + 1)
+                if (y == usr.y && x == usr.x + 1)
                     std::cout << '>';
                 break;
             case 2:
-                if (i == usr.y + 1 && j == usr.x)
+                if (y == usr.y + 1 && x == usr.x)
                     std::cout << 'v';
                 break;
             case 3:
-                if (i == usr.y && j == usr.x - 1)
+                if (y == usr.y && x == usr.x - 1)
                     std::cout << '<';
                 break;
             case 4:
-                if (i == usr.y - 1 && j == usr.x)
+                if (y == usr.y - 1 && x == usr.x)
                     std::cout << '^';
                 break;
             default:
                 break;
             }
-            */
+            
         }
 
         std::cout << "#" << std::endl;
