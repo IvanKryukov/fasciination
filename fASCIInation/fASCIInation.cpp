@@ -4,19 +4,13 @@
 #include <conio.h>
 #include <windows.h>
 
+#include "coord.h"
+#include "bodyobj.h"
+
 #define X_SIZE (int)40 // 6
 #define Y_SIZE (int)24 // 3
 
 char usr_map [Y_SIZE][X_SIZE];
-
-typedef struct
-{
-    int x;
-    int y;
-    char skin;
-    int direction;
-} t_usr;
-t_usr user_fig = { X_SIZE / 2, Y_SIZE / 2, 'X', 4 };
 
 void hidecursor()
 {
@@ -29,10 +23,10 @@ void hidecursor()
 
 void init_scene(char* scene, int size)
 {
-    memset((void*)scene, ' ', size);
+    memset((void*)scene, '.', size);
 }
 
-void print_scene(t_usr usr)
+void print_scene(bodyobj usr)
 {
     std::cout << "##########################################" << std::endl;
 
@@ -42,33 +36,10 @@ void print_scene(t_usr usr)
 
         for (int x = 0; x < X_SIZE; x++)
         {
-            if (y == usr.y && x == usr.x)
-                std::cout << usr.skin;
+            if (y == usr.get_coord_y() && x == usr.get_coord_x())
+                std::cout << usr.get_skin();
             else
                 std::cout << usr_map[y][x];
-            
-            switch (usr.direction)
-            {
-            case 1:
-                if (y == usr.y && x == usr.x + 1)
-                    std::cout << '>';
-                break;
-            case 2:
-                if (y == usr.y + 1 && x == usr.x)
-                    std::cout << 'v';
-                break;
-            case 3:
-                if (y == usr.y && x == usr.x - 1)
-                    std::cout << '<';
-                break;
-            case 4:
-                if (y == usr.y - 1 && x == usr.x)
-                    std::cout << '^';
-                break;
-            default:
-                break;
-            }
-            
         }
 
         std::cout << "#" << std::endl;
@@ -77,7 +48,7 @@ void print_scene(t_usr usr)
     std::cout << "##########################################" << std::endl;
 }
 
-int usr_action(int pressed_key, t_usr * usr)
+int usr_action(int pressed_key, bodyobj * usr)
 {
     int ret = 0;
 
@@ -91,52 +62,53 @@ int usr_action(int pressed_key, t_usr * usr)
     case 'd':
     case 'D':
     case VK_RIGHT:
-        if ((usr->x + 1 <= X_SIZE - 1) && (usr_map[usr->y][usr->x + 1] != '~'))
-            usr->x += 1;
-        usr->direction = 1;
+        if ((usr->get_coord_x() + 1 < X_SIZE) && (usr->get_drct_look_x() == 1))
+            usr->set_drct_move_x(1);
+        usr->set_drct_look_x(1);
         ret = 1;
         break;
 
     case 'a':
     case 'A':
     case VK_LEFT:
-        if ((usr->x - 1 >= 0) && (usr_map[usr->y][usr->x - 1] != '~'))
-            usr->x -= 1;
-        usr->direction = 3;
+        if ((usr->get_coord_x() - 1 >= 0) && (usr->get_drct_look_x() == -1))
+            usr->set_drct_move_x(-1);
+        usr->set_drct_look_x(-1);
         ret = 1;
         break;
 
     case 'w':
     case 'W':
     case VK_UP:
-        if ((usr->y - 1 >= 0) && (usr_map[usr->y - 1][usr->x] != '~'))
-            usr->y -= 1;
-        usr->direction = 4;
+        if ((usr->get_coord_y() - 1 >= 0) && (usr->get_drct_look_y() == -1))
+            usr->set_drct_move_y(-1);
+        usr->set_drct_look_y(-1);
         ret = 1;
         break;
 
     case 's':
     case 'S':
     case VK_DOWN:
-        if ((usr->y + 1 <= Y_SIZE - 1) && (usr_map[usr->y + 1][usr->x] != '~'))
-            usr->y += 1;
-        usr->direction = 2;
+        if ((usr->get_coord_y() + 1 < Y_SIZE) && (usr->get_drct_look_y() == 1))
+            usr->set_drct_move_y(1);
+        usr->set_drct_look_y(1);
         ret = 1;
         break;
 
     case VK_SPACE:
-        if (usr_map[user_fig.y][user_fig.x] == ' ')
-            usr_map[user_fig.y][user_fig.x] = '~';
+        if (usr_map[usr->get_coord_y()][usr->get_coord_x()] == ' ')
+            usr_map[usr->get_coord_y()][usr->get_coord_x()] = '~';
         else
-            usr_map[user_fig.y][user_fig.x] = ' ';
+            usr_map[usr->get_coord_y()][usr->get_coord_x()] = ' ';
 
         ret = 1;
         break;
 
-
     default:
         break;
     }
+
+    usr->update_coord();
 
     return ret;
 }
@@ -145,6 +117,7 @@ int main()
 {
     hidecursor();
     init_scene(&usr_map[0][0], sizeof(usr_map));
+    bodyobj user_fig = bodyobj(coord(X_SIZE / 2, Y_SIZE / 2), coord(), 'X');
     int c = 0;
     int action_res = 0;
 

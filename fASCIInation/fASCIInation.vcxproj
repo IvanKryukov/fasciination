@@ -139,7 +139,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="bodyobj.cpp" />
+    <ClCompile Include="coord.cpp" />
     <ClCompile Include="fASCIInation.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="bodyobj.h" />
+    <ClInclude Include="coord.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
