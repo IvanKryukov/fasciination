@@ -54,8 +54,7 @@ int usr_action(int pressed_key, bodyobj * usr)
 
     switch (pressed_key)
     {
-    case 'q':
-    case 'Q':
+    case VK_ESCAPE:
         ret = -1;
         break;
 
